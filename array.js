@@ -20,6 +20,12 @@ Array.prototype.shuffle = function() {
   }
   return copy;
 };
+//E.g., .every(3) gives every 3rd element in array
+Array.prototype.every = function(num) {
+  var resultant = [];
+  for (var i = 0; i < this.length; i+=num) resultant.push(this[i]);
+  return resultant;
+};
 Array.prototype.map = function(fn) {
   var copy = [];
   for (var i = 0; i < this.length; i++) {
