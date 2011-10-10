@@ -1,9 +1,10 @@
 /*
 *   Some useful array functions
 *   @author Yufei Liu (liu.yufei@gmail.com)
-*   @date September 7, 2011
+*   @date October 10, 2011
 *   Released under GPL3: http://www.gnu.org/licenses/gpl.html
 */
+//Clone is shallow
 Array.prototype.clone = function() {
   return this.slice(0);
 }
@@ -26,10 +27,29 @@ Array.prototype.map = function(fn) {
   }
   return copy;
 };
+Array.prototype.reduce = function(fn, initial) {
+  var aggregate = initial;
+  for (var i = 0; i < this.length; i++) {
+    aggregate = fn(this[i], aggregate);
+  }
+  return aggregate;
+};
+Array.prototype.filter = function(fn) {
+  var resultant = [];
+  this.map(function(obj) {
+    if (fn(obj)) resultant.push(obj);
+  });
+  return resultant;
+};
+Array.prototype.reject = function(fn) {
+  rf = function(obj) {
+    if (fn(obj)) return false;
+    return true;
+  };
+  return this.filter(rf);
+};
 Array.prototype.sum = function() {
-  var sum = 0;
-  this.map(function(num) { sum += num; });
-  return sum;
+  return this.reduce(function(o,a){return o+a;}, 0);
 };
 Array.prototype.mean = function() {
   return this.sum() / this.length;
@@ -55,4 +75,36 @@ Array.prototype.stdev = function() {
   var stdevSum = 0;
   this.map(function(num) {stdevSum += (num-mean)*(num-mean); });
   return Math.sqrt(stdevSum/this.length);
+};
+//Pass in equality check function fn(o1,o2)
+Array.prototype.frequencyMap = function() {
+  var freqs = {};
+
+  var fn = arguments[0];
+  if (fn==undefined) { fn = function(a,b) { return a==b; }; }
+
+  var uniqueKeys = [];
+  this.map(function(obj){
+    var key = null;
+    for (var i = 0; i < uniqueKeys.length; i++) {
+      if (fn(uniqueKeys[i],obj)) {
+        key = uniqueKeys[i];
+        break;
+      }
+    }
+    if (key===null) {
+      uniqueKeys.push(obj);
+      freqs[obj]=1;
+    } else {
+      freqs[key]+=1;
+    }
+
+  });
+
+  return freqs;
+};
+Array.prototype.inRange = function(low, high) {
+  return this.filter(function(obj){
+    return obj >= low && obj <= high;
+  });
 };
