@@ -7,6 +7,18 @@
 Array.prototype.clone = function() {
   return this.slice(0);
 }
+Array.prototype.first = function() {
+  if (arguments.length<1) return this[0];
+  var resultant = [];
+  for (var i = 0; i < arguments[0]; i++) resultant.push(this[i]);
+  return resultant;
+}
+Array.prototype.last = function() {
+  if (arguments.length<1) return this[this.length-1];
+  var resultant = [];
+  for (var i = this.length-arguments[0]; i < this.length; i++) resultant.push(this[i]);
+  return resultant;
+}
 //Shuffle is not in-place
 Array.prototype.shuffle = function() {
   var copy = this.clone();
@@ -20,20 +32,23 @@ Array.prototype.shuffle = function() {
   return copy;
 };
 //Take a random sample of given size of the array
-Array.prototype.sample = function(size) {
+Array.prototype.sample = function() {
   var resultant = [];
+  var size = arguments.length<1 ? 1 : arguments[0];
   var curSize = size;
   for (var i=0; i<this.length; i++) {
     if (Math.random()<=curSize/(this.length-i)) resultant.push(this[i]);
     curSize = size-resultant.length;
     if (curSize==0) break;
   }
+  if (resultant.length===1) return resultant[0];
   return resultant;
 };
 //E.g., .getEvery(3) gives every 3rd element in array
 Array.prototype.getEvery = function(num) {
   var resultant = [];
-  for (var i = 0; i < this.length; i+=num) resultant.push(this[i]);
+  if (num<1) return resultant;
+  for (var i = num-1; i < this.length; i+=num) resultant.push(this[i]);
   return resultant;
 };
 Array.prototype.map = function(fn) {
@@ -63,6 +78,21 @@ Array.prototype.reject = function(fn) {
     return true;
   };
   return this.filter(rf);
+};
+//Can pass in either a value for direct comparison, or a function that returns true for
+//  valid values
+Array.prototype.count = function() {
+  if (arguments.length<1) return this.length;
+  var param = arguments[0];
+  var count=0;
+  this.map(function(o){
+    if (typeof(param)==="function" && param(o)) {
+      count++;
+    } else if (param===o) {
+      count++;
+    }
+  });
+  return count;
 };
 Array.prototype.sum = function() {
   return this.reduce(function(o,a){return o+a;}, 0);
