@@ -30,8 +30,8 @@ Array.prototype.sample = function(size) {
   }
   return resultant;
 };
-//E.g., .every(3) gives every 3rd element in array
-Array.prototype.every = function(num) {
+//E.g., .getEvery(3) gives every 3rd element in array
+Array.prototype.getEvery = function(num) {
   var resultant = [];
   for (var i = 0; i < this.length; i+=num) resultant.push(this[i]);
   return resultant;
