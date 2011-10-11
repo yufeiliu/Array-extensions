@@ -1,8 +1,9 @@
 Some useful functions for Javascript arrays. Consider this a lighter
 alternative to underscore.js. Also, it offers some new functions that
-underscore.js does not currently have, such as frequencyMap()
+underscore.js does not currently have, such as frequencyMap() and
+sample()
 
 Unlike underscore.js, all functions are built into Array.prototype.
  
-Yufei Liu (liu.yufei@gmail.com)
+Yufei Liu (yufeiliu.com)
 October 10, 2011

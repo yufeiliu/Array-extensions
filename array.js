@@ -1,7 +1,6 @@
 /*
 *   Some useful array functions
-*   @author Yufei Liu (liu.yufei@gmail.com)
-*   @date October 10, 2011
+*   @author Yufei Liu (yufeiliu.com)
 *   Released under GPL3: http://www.gnu.org/licenses/gpl.html
 */
 //Clone is shallow
@@ -19,6 +18,17 @@ Array.prototype.shuffle = function() {
     copy[rnd2] = tmp;
   }
   return copy;
+};
+//Take a random sample of given size of the array
+Array.prototype.sample = function(size) {
+  var resultant = [];
+  var curSize = size;
+  for (var i=0; i<this.length; i++) {
+    if (Math.random()<=curSize/(this.length-i)) resultant.push(this[i]);
+    curSize = size-resultant.length;
+    if (curSize==0) break;
+  }
+  return resultant;
 };
 //E.g., .every(3) gives every 3rd element in array
 Array.prototype.every = function(num) {
@@ -85,10 +95,8 @@ Array.prototype.stdev = function() {
 //Pass in equality check function fn(o1,o2)
 Array.prototype.frequencyMap = function() {
   var freqs = {};
-
   var fn = arguments[0];
   if (fn==undefined) { fn = function(a,b) { return a==b; }; }
-
   var uniqueKeys = [];
   this.map(function(obj){
     var key = null;
@@ -106,7 +114,6 @@ Array.prototype.frequencyMap = function() {
     }
 
   });
-
   return freqs;
 };
 Array.prototype.inRange = function(low, high) {
